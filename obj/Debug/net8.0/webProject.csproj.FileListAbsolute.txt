@@ -228,3 +228,10 @@ C:\Users\Rania\source\repos\webProject\webProject\obj\Debug\net8.0\refint\webPro
 C:\Users\Rania\source\repos\webProject\webProject\obj\Debug\net8.0\webProject.pdb
 C:\Users\Rania\source\repos\webProject\webProject\obj\Debug\net8.0\webProject.genruntimeconfig.cache
 C:\Users\Rania\source\repos\webProject\webProject\obj\Debug\net8.0\ref\webProject.dll
+C:\Users\Rania\source\repos\webProject\webProject\obj\Debug\net8.0\webProject.sourcelink.json
+C:\Users\Rania\source\repos\webProject\webProject\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Rania\source\repos\webProject\webProject\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Rania\source\repos\webProject\webProject\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Rania\source\repos\webProject\webProject\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Rania\source\repos\webProject\webProject\bin\Debug\net8.0\Npgsql.dll
+C:\Users\Rania\source\repos\webProject\webProject\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

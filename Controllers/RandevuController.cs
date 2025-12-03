@@ -4,7 +4,23 @@ namespace webProject.Controllers
 {
     public class RandevuController : Controller
     {
-        public IActionResult RandevuOlustur()
+        public IActionResult RanDetay()
+        {
+            return View();
+        }
+        public IActionResult RanDuzenle()
+        {
+            return View();
+        }
+        public IActionResult RanList()
+        {
+            return View();
+        }
+        public IActionResult RanOlustur()
+        {
+            return View();
+        }
+        public IActionResult RanSil()
         {
             return View();
         }

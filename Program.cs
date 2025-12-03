@@ -1,9 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using webProject.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<FitnessDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -22,6 +29,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Uye}/{action=KayitOl}/{id?}");
 
 app.Run();
