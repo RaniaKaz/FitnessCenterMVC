@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Fiyat)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Edit", "HizDuzenle", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "HizDetay", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "HizSil", new { id = item.ID })
             </td>
         </tr>
 }

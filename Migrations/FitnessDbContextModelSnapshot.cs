@@ -17,7 +17,7 @@ namespace webProject.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.22")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -42,7 +42,7 @@ namespace webProject.Migrations
 
                     b.HasIndex("HizmetID");
 
-                    b.ToTable("AtrHizmetler");
+                    b.ToTable("AtrHizmet");
                 });
 
             modelBuilder.Entity("webProject.Models.AntMusaitlik", b =>
@@ -73,7 +73,7 @@ namespace webProject.Migrations
 
                     b.HasIndex("AntrenorID");
 
-                    b.ToTable("AtrMusaitlikler");
+                    b.ToTable("AtrMusaitlik");
                 });
 
             modelBuilder.Entity("webProject.Models.Antrenor", b =>
@@ -98,7 +98,7 @@ namespace webProject.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Antrenorlar");
+                    b.ToTable("Antrenor");
                 });
 
             modelBuilder.Entity("webProject.Models.HizSalon", b =>
@@ -127,7 +127,7 @@ namespace webProject.Migrations
 
                     b.HasIndex("SalonID");
 
-                    b.ToTable("HizSalonlar");
+                    b.ToTable("HizSalon");
                 });
 
             modelBuilder.Entity("webProject.Models.Hizmet", b =>
@@ -150,7 +150,7 @@ namespace webProject.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Hizmetler");
+                    b.ToTable("Hizmet");
                 });
 
             modelBuilder.Entity("webProject.Models.Randevu", b =>
@@ -198,7 +198,7 @@ namespace webProject.Migrations
 
                     b.HasIndex("salonID");
 
-                    b.ToTable("Randevular");
+                    b.ToTable("Randevu");
                 });
 
             modelBuilder.Entity("webProject.Models.Salon", b =>
@@ -215,7 +215,7 @@ namespace webProject.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Salonlar");
+                    b.ToTable("Salon");
                 });
 
             modelBuilder.Entity("webProject.Models.Uye", b =>
@@ -244,13 +244,13 @@ namespace webProject.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Uyeler");
+                    b.ToTable("Uye");
                 });
 
             modelBuilder.Entity("webProject.Models.AntHizmet", b =>
                 {
                     b.HasOne("webProject.Models.Antrenor", "Antrenor")
-                        .WithMany("Hizmetler")
+                        .WithMany("AntHizmetler")
                         .HasForeignKey("AntrenorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -269,7 +269,7 @@ namespace webProject.Migrations
             modelBuilder.Entity("webProject.Models.AntMusaitlik", b =>
                 {
                     b.HasOne("webProject.Models.Antrenor", "Antrenor")
-                        .WithMany("Musaitlikler")
+                        .WithMany("Musaitlik")
                         .HasForeignKey("AntrenorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -333,9 +333,9 @@ namespace webProject.Migrations
 
             modelBuilder.Entity("webProject.Models.Antrenor", b =>
                 {
-                    b.Navigation("Hizmetler");
+                    b.Navigation("AntHizmetler");
 
-                    b.Navigation("Musaitlikler");
+                    b.Navigation("Musaitlik");
 
                     b.Navigation("Randevular");
                 });

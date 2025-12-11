@@ -1,0 +1,41 @@
+﻿@model IEnumerable<webProject.Models.Salon>
+
+@{
+    ViewData["Title"] = "SalList";
+}
+
+<h1>SalList</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CalismaSaatleri)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CalismaSaatleri)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "SalDuzenle", new { id=item.ID  }) |
+                @Html.ActionLink("Details", "SalDetay", new { id=item.ID }) |
+                @Html.ActionLink("Delete", "SalSil", new { id=item.ID  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

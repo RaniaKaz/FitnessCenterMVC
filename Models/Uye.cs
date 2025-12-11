@@ -5,9 +5,9 @@ namespace webProject.Models
     public class Uye
     {
         public int ID { get; set; }
+
         [Required(ErrorMessage = "Ad alanı zorunludur.")]
         [MinLength(2, ErrorMessage = "Ad en az 2 karakter olmalıdır.")]
-
         public string Ad { get; set; }
 
         [MinLength(2, ErrorMessage = "Soyad en az 2 karakter olmalıdır.")]
