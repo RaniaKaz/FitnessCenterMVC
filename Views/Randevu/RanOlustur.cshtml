@@ -12,9 +12,6 @@
     <div class="col-md-4">
         <form asp-action="RanOlustur" method="post">
 
-            <label>Üye</label>
-            <select name="uyeId" asp-items="ViewBag.Uyeler"></select>
-
             <label>Hizmet</label>
             <select name="hizmetId" asp-items="ViewBag.Hizmetler"></select>
 
@@ -23,7 +20,6 @@
 
             <button type="submit">Randevu Al</button>
         </form>
-
     </div>
 </div>
 

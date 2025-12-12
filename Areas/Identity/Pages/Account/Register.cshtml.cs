@@ -124,7 +124,7 @@ namespace webProject.Areas.Identity.Pages.Account
 
                     await _userManager.AddToRoleAsync(user, "Uye");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
+                    var userId = await _userManager.GetUserIdAsync(user); //bunu DB’deki AspNetUsers kaydına çevirir
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using webProject.Data;
@@ -13,7 +14,7 @@ namespace webProject.Controllers
         public RandevuController(FitnessDbContext context, UserManager<ApplicationUsers> userManager)
         {
             _context = context;
-            _userManager = userManager;
+            _userManager = userManager; //kullanıcı yönetimi için 
         }
         private List<Antrenor> uygunAntrenorleriGetir(int hizmetid, DateTime baslangic, int sure)
         {
@@ -39,6 +40,7 @@ namespace webProject.Controllers
             ViewData["Hizmetler"] = new SelectList(_context.Hizmet, "ID", "HizmetAd");
             return View();
         }
+        [Authorize(Roles = "Uye")]
         [HttpPost]
         public IActionResult RanOlustur(int uyeID, int hizmetId, DateTime BaslangicTarihi)
         {
@@ -118,10 +120,11 @@ namespace webProject.Controllers
         //-----Listeleme İşlemi-----
         public IActionResult RanList()
         {
+
             var randevular = _context.Randevu.ToList();
             return View(randevular);
         }
-
+        //-----Listeleme İşlemi (Üye Bazlı)-----
         //-----Delete İşlemi-----
         public IActionResult RanSil(int id)
         {
