@@ -18,8 +18,8 @@ namespace webProject.Controllers
 
             return View();
         }
-
-        public IActionResult UyeEkle(Uye uye)
+        [HttpPost]
+        public IActionResult UyeOlustur(Uye uye)
         {
             if (ModelState.IsValid)
             {

@@ -1,0 +1,32 @@
+﻿@model webProject.Models.AntrenorHizmetSecViewModel
+
+<h2>@Model.AntAdSoyad - Hizmet Seçimi</h2>
+
+<form asp-action="HizmetSec" method="post">
+    <input type="hidden" asp-for="AntID" />
+
+    <table calss="table">
+        <thead>
+            <tr>
+                <th>Seç</th>
+                <th>Hizmet Adı</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for(int i = 0; i < Model.Hizmetler.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input asp-for="Hizmetler[i].SeciliMi" />
+                        <input asp-for="Hizmetler[i].ID" />
+                    </td>
+                    <td>
+                        @Model.Hizmetler[i].Ad
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

@@ -17,5 +17,6 @@
         public bool OnayDurumu { get; set; }
         public TimeSpan BaslangicSaat { get; set; }
         public TimeSpan BitisSaat { get; set; }
+        public int sureDk { get; set; }
     }
 }

@@ -18,8 +18,8 @@ namespace webProject.Controllers
 
             return View();
         }
-
-        public IActionResult HizEkle(Hizmet hizmet)
+        [HttpPost]
+        public IActionResult HizOlustur(Hizmet hizmet)
         {
             if (ModelState.IsValid)
             {

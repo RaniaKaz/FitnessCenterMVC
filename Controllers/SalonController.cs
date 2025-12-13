@@ -18,8 +18,8 @@ namespace webProject.Controllers
 
             return View();
         }
-
-        public IActionResult SalEkle(Salon salon)
+        [HttpPost]
+        public IActionResult SalOlustur(Salon salon)
         {
             if (ModelState.IsValid)
             {

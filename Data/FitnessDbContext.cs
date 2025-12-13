@@ -13,8 +13,8 @@ namespace webProject.Data
         }
 
         public DbSet<Antrenor> Antrenor { get; set; }
-        public DbSet<AntHizmet> AtrHizmet { get; set; }
-        public DbSet<AntMusaitlik> AtrMusaitlik { get; set; }
+        public DbSet<AntHizmet> AntHizmet { get; set; }
+        public DbSet<AntMusaitlik> AntMusaitlik { get; set; }
         public DbSet<Hizmet> Hizmet { get; set; }
         public DbSet<HizSalon> HizSalon { get; set; }
         public DbSet<Randevu> Randevu { get; set; }
