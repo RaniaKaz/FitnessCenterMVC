@@ -1,12 +1,20 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using webProject.Data;
+using webProject.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<FitnessDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDefaultIdentity<ApplicationUsers>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FitnessDbContext>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddIdentity<ApplicationUsers, IdentityRole>()
+    .AddEntityFrameworkStores<FitnessDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -24,7 +32,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

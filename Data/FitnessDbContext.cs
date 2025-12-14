@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using webProject.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace webProject.Data
 {
-    public class FitnessDbContext : DbContext
+    public class FitnessDbContext : IdentityDbContext<ApplicationUsers>
     {
 
 
@@ -23,6 +24,7 @@ namespace webProject.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<AntHizmet>()
                 .HasKey(ah => new { ah.AntID, ah.HizID });
 
