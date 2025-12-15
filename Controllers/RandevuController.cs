@@ -124,7 +124,7 @@ namespace webProject.Controllers
             var randevular = _context.Randevu.ToList();
             return View(randevular);
         }
-        //-----Listeleme İşlemi (Üye Bazlı)-----
+        //-----Listeleme İşlemi (Üye Bazlı)----------
         //-----Delete İşlemi-----
         public IActionResult RanSil(int id)
         {
