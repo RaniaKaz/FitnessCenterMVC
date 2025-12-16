@@ -19,12 +19,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using webProject.Data;
 using webProject.Models;
 
 namespace webProject.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
+        private readonly FitnessDbContext _context;
         private readonly SignInManager<ApplicationUsers> _signInManager;
         private readonly UserManager<ApplicationUsers> _userManager;
         private readonly IUserStore<ApplicationUsers> _userStore;
@@ -33,12 +35,14 @@ namespace webProject.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
+            FitnessDbContext context,
             UserManager<ApplicationUsers> userManager,
             IUserStore<ApplicationUsers> userStore,
             SignInManager<ApplicationUsers> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            context = _context;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -59,12 +63,12 @@ namespace webProject.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Name")]
             [Range(2, 50, ErrorMessage = "Name length sould be between 2 and 50")]
-            public string Name { get; set; }
+            public string Name { get; set; } //eklenen özellik
 
             [Required]
             [Display(Name = "Surname")]
             [Range(2, 50 , ErrorMessage = "Name length sould be between 2 and 50")]
-            public string Surname { get; set; }
+            public string Surname { get; set; } //eklenen özellik
 
             [Required]
             [EmailAddress]
@@ -92,15 +96,23 @@ namespace webProject.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            var uye = new Uye
-            {
-
-            };
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                var uye = new Uye
+                {
+                    Ad = Input.Name,
+                    Soyad = Input.Surname,
+                    Email = Input.Email,
+                    KayitTarihi = DateTime.Now
+                };
+                _context.Uye.Add(uye);
+                _context.SaveChanges();
+                //Identity user oluşturma
+
                 var user = CreateUser();
+                user.UyeID = uye.ID; // ilişkiyi kurma
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -132,6 +144,10 @@ namespace webProject.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+                //Identity başarısız ise
+                _context.Uye.Remove(uye);
+                _context.SaveChanges();
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
