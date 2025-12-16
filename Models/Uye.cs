@@ -26,6 +26,8 @@ namespace webProject.Models
         public string Email { get; set; }
         [Required(ErrorMessage = "Şifre alanı zorunludur.")]
         [Display(Name = "Şifre")]
+
+        public DateTime KayitTarihi { get; set; }
         public string Sifre { get; set; }
 
     }

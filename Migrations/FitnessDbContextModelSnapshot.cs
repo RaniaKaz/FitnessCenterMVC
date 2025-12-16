@@ -288,6 +288,9 @@ namespace webProject.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<int?>("UyeID")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -296,6 +299,8 @@ namespace webProject.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("UyeID");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -528,6 +533,15 @@ namespace webProject.Migrations
                         .IsRequired();
 
                     b.Navigation("Antrenor");
+                });
+
+            modelBuilder.Entity("webProject.Models.ApplicationUsers", b =>
+                {
+                    b.HasOne("webProject.Models.Uye", "uye")
+                        .WithMany()
+                        .HasForeignKey("UyeID");
+
+                    b.Navigation("uye");
                 });
 
             modelBuilder.Entity("webProject.Models.HizSalon", b =>
