@@ -6,7 +6,8 @@ using webProject.Models;
 namespace webProject.Controllers
 {
     public class AntrenorController : Controller
-    {
+    {//commnt
+        int sayi = 0;
         private readonly FitnessDbContext _context;
         public AntrenorController(FitnessDbContext context)
         {
