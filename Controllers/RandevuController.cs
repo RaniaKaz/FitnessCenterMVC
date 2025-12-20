@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using webProject.Data;
 using webProject.Models;
@@ -8,9 +9,11 @@ namespace webProject.Controllers
     public class RandevuController : Controller
     {
         private readonly FitnessDbContext _context;
-        public RandevuController(FitnessDbContext context)
+        private readonly UserManager<ApplicationUsers> _userManager;
+        public RandevuController(FitnessDbContext context, UserManager<ApplicationUsers> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         private List<Antrenor> uygunAntrenorleriGetir(int hizmetid, DateTime baslangic, int sure)
         {
