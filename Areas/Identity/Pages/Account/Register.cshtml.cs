@@ -42,7 +42,7 @@ namespace webProject.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
-            context = _context;
+            _context = context;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -62,12 +62,12 @@ namespace webProject.Areas.Identity.Pages.Account
         {
             [Required]
             [Display(Name = "Name")]
-            [Range(2, 50, ErrorMessage = "Name length sould be between 2 and 50")]
+            [MinLength(2, ErrorMessage = "Name length sould be greater than 2")]
             public string Name { get; set; } //eklenen özellik
 
             [Required]
             [Display(Name = "Surname")]
-            [Range(2, 50 , ErrorMessage = "Name length sould be between 2 and 50")]
+            [MinLength(2, ErrorMessage = "Surname length sould be greater than 2")]
             public string Surname { get; set; } //eklenen özellik
 
             [Required]
@@ -76,7 +76,7 @@ namespace webProject.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -98,67 +98,66 @@ namespace webProject.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
+                return Page();
+
+            var user = CreateUser();
+
+            await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+            await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+            var result = await _userManager.CreateAsync(user, Input.Password);
+
+            if (!result.Succeeded)
             {
-                var uye = new Uye
-                {
-                    Ad = Input.Name,
-                    Soyad = Input.Surname,
-                    Email = Input.Email,
-                    KayitTarihi = DateTime.Now
-                };
-                _context.Uye.Add(uye);
-                _context.SaveChanges();
-                //Identity user oluşturma
-
-                var user = CreateUser();
-                user.UyeID = uye.ID; // ilişkiyi kurma
-
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    await _userManager.AddToRoleAsync(user, "Uye");
-
-                    var userId = await _userManager.GetUserIdAsync(user); //bunu DB’deki AspNetUsers kaydına çevirir
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
-                }
-                //Identity başarısız ise oluşturulan üyeyi geri al
-                _context.Uye.Remove(uye);
-                _context.SaveChanges();
-
                 foreach (var error in result.Errors)
-                {
                     ModelState.AddModelError(string.Empty, error.Description);
-                }
+
+                return Page();
             }
 
-            // If we got this far, something failed, redisplay form
-            return Page();
+            // 🔹 Identity başarılı → Uye tablosuna ekle
+            var uye = new Uye
+            {
+                Ad = Input.Name,
+                Soyad = Input.Surname,
+                Email = Input.Email,
+                KayitTarihi = DateTime.UtcNow,
+                IdentityUserId = user.Id
+            };
+
+            _context.Uye.Add(uye);
+            await _context.SaveChangesAsync();
+
+            // 🔹 Otomatik Uye rolü
+            if (!await _userManager.IsInRoleAsync(user, "Uye"))
+                await _userManager.AddToRoleAsync(user, "Uye");
+
+            _logger.LogInformation("User created a new account with password.");
+
+            // 🔹 Email confirmation (isteğe bağlı)
+            var userId = await _userManager.GetUserIdAsync(user);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+            var callbackUrl = Url.Page(
+                "/Account/ConfirmEmail",
+                pageHandler: null,
+                values: new { area = "Identity", userId, code },
+                protocol: Request.Scheme);
+
+            await _emailSender.SendEmailAsync(
+                Input.Email,
+                "Confirm your email",
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
+            );
+
+            // 🔹 Login + NET yönlendirme
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return RedirectToAction("UserPaneli", "Uye");
         }
+
 
         private ApplicationUsers CreateUser()
         {

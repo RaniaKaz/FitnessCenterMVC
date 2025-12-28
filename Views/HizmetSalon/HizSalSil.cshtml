@@ -1,0 +1,46 @@
+﻿@model webProject.Models.HizSalon
+
+@{
+    ViewData["Title"] = "HizSalSil";
+}
+
+<h1>HizSalSil</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>HizSalon</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Fiyat)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Fiyat)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Sure)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Sure)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Hizmet)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Hizmet.Ad)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salon)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salon.Ad)
+        </dd>
+    </dl>
+    
+    <form asp-action="HizSalSil">
+        <input type="hidden" asp-for="HizmetID" />
+        <input type="hidden" asp-for="SalonID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

@@ -1,5 +1,21 @@
+/* ===== CSS Variables - Fitness Theme ===== */
+:root {
+  --primary-color: #ff6b35;
+  --secondary-color: #f7931e;
+  --accent-color: #c1121f;
+  --dark-color: #2b2d42;
+  --light-color: #edf2f4;
+  --text-dark: #212529;
+  --text-light: #ffffff;
+  --gradient-primary: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  --gradient-dark: linear-gradient(135deg, #2b2d42 0%, #1a1b2e 100%);
+}
+
+/* ===== Base Styles ===== */
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,15 +24,521 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--light-color);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+/* ===== Navbar Styles ===== */
+.navbar {
+  background: var(--gradient-primary) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-light) !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.nav-link {
+  color: var(--text-light) !important;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem !important;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ===== Button Styles ===== */
+.btn-primary {
+  background: var(--gradient-primary);
+  border: none;
+  color: var(--text-light);
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+  background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%);
+}
+
+.btn-secondary {
+  background-color: var(--dark-color);
+  border: none;
+  color: var(--text-light);
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #1a1b2e;
+  transform: translateY(-3px);
+}
+
+.btn-danger {
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+}
+
+.btn-danger:hover {
+  background-color: #a00f1a;
+  transform: translateY(-3px);
+}
+
+/* ===== Card Styles ===== */
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background: var(--gradient-primary);
+  color: var(--text-light);
+  font-weight: 600;
+  border: none;
+  padding: 1.25rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* ===== Form Styles ===== */
+/* Only apply custom styles to forms NOT using form-floating */
+.form-control:not(.form-floating .form-control) {
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+}
+
+/* Form floating support - don't override Bootstrap's form-floating */
+.form-floating>.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  padding: 1rem 0.75rem;
+}
+
+.form-floating>.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+}
+
+.form-floating>label {
+  color: #6c757d;
+  font-weight: 400;
+}
+
+.form-label:not(.form-floating > label) {
+  font-weight: 600;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.form-check-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+}
+
+/* ===== Table Styles ===== */
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.table thead {
+  background: var(--gradient-primary);
+  color: var(--text-light);
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255, 107, 53, 0.05);
+}
+
+/* ===== Footer Styles ===== */
+.footer {
+  background: var(--gradient-dark);
+  color: var(--text-light);
+  padding: 3rem 0 1rem;
+  margin-top: auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure main content is above footer */
+main {
+  position: relative;
+  z-index: 10;
+  min-height: calc(100vh - 300px);
+  padding-bottom: 5rem;
+  margin-bottom: 2rem;
+}
+
+.footer h5 {
+  color: var(--primary-color);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.footer a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.footer a:hover {
+  color: var(--primary-color);
+  padding-left: 5px;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.social-links a {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 0 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+  background: var(--gradient-primary);
+  transform: translateY(-3px);
+}
+
+/* ===== Hero Section ===== */
+.hero-section {
+  background: var(--gradient-primary);
+  color: var(--text-light);
+  padding: 5rem 0;
+  text-align: center;
+  border-radius: 15px;
+  margin-bottom: 3rem;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* ===== Feature Cards ===== */
+.feature-card {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+/* ===== Utility Classes ===== */
+.text-primary-custom {
+  color: var(--primary-color) !important;
+}
+
+.bg-primary-custom {
+  background: var(--gradient-primary) !important;
+}
+
+.shadow-custom {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section p {
+    font-size: 1rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+}
+
+/* ===== Fix for Identity Pages ===== */
+/* Ensure rows and columns are visible */
+.row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+.col-md-4,
+.col-md-6,
+.col-md-offset-2 {
+  display: block !important;
+  min-height: 1px !important;
+}
+
+/* Ensure forms are visible */
+form {
+  display: block !important;
+}
+
+/* Ensure form sections are visible */
+section {
+  display: block !important;
+}
+
+/* Ensure divs inside forms are visible */
+form div {
+  display: block !important;
+}
+
+/* Ensure h1, h2, h3 are visible */
+h1,
+h2,
+h3 {
+  display: block !important;
+}
+
+/* ===== Feature Cards ===== */
+.feature-card {
+  transition: all 0.3s ease;
+  border: none;
+  height: 100%;
+  cursor: pointer;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Feature card links */
+a .feature-card {
+  color: inherit;
+}
+
+a .feature-card h4,
+a .feature-card p {
+  color: var(--text-dark);
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.feature-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.feature-icon i {
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon i {
+  transform: scale(1.1);
+}
+
+/* ===== Utility Classes ===== */
+.text-primary-custom {
+  color: var(--primary-color) !important;
+}
+
+.bg-primary-custom {
+  background: var(--gradient-primary) !important;
+}
+.admin-header {
+    background: linear-gradient(90deg, #ff7a18, #ff9f1c);
+    color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+    .admin-header h1 {
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+.admin-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 200px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .stat-card h5 {
+        font-size: 15px;
+        color: #777;
+        margin-bottom: 8px;
+    }
+
+    .stat-card span {
+        font-size: 28px;
+        font-weight: 700;
+        color: #ff7a18;
+    }
+
+/* =========================
+   ADMIN MENU
+========================= */
+
+.admin-menu {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+    .admin-menu a {
+        background: #fff;
+        border-radius: 12px;
+        padding: 18px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .admin-menu a:hover {
+            background: #ff7a18;
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        .admin-menu a i {
+            font-size: 20px;
+        }
+
+/* =========================
+   PAGE BACKGROUND
+========================= */
+
+.admin-page {
+    background: #f4f6f8;
+    min-height: 100vh;
+    padding: 25px;
 }

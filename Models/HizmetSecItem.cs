@@ -1,5 +1,9 @@
-﻿namespace webProject.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+
+namespace webProject.Models
 {
+    [NotMapped]
     public class HizmetSecItem
     {
         public int ID { get; set; }

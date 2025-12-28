@@ -1,0 +1,82 @@
+﻿@model IEnumerable<webProject.Models.Randevu>
+
+@{
+    ViewData["Title"] = "Tüm Randevular (Admin)";
+}
+
+<h2>Tüm Randevular</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Üye</th>
+            <th>Hizmet</th>
+            <th>Antrenör</th>
+            <th>Tarih</th>
+            <th>Durum</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Uye?.Ad</td>
+                <td>@r.Hizmet?.Ad</td>
+                <td>@r.Antrenor?.Ad</td>
+                <td>@r.RandevuTarihi.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+
+                <td>
+                    @if (r.OnayDurumu)
+                    {
+                        <span class="badge bg-success">Onaylandı</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Beklemede</span>
+                    }
+                </td>
+
+                <td>
+                    <!-- Detay -->
+                    <a asp-action="RanDetay"
+                       asp-route-id="@r.ID"
+                       class="btn btn-sm btn-info">
+                        Detay
+                    </a>
+
+                    <!-- Düzenle (isteğe bağlı sadece onaysız) -->
+                    @if (!r.OnayDurumu)
+                    {
+                        <a asp-action="RanDuzenle"
+                           asp-route-id="@r.ID"
+                           class="btn btn-sm btn-warning">
+                            Düzenle
+                        </a>
+                    }
+
+                    <!-- Sil -->
+                    <a asp-action="RanSilOnay"
+                       asp-route-id="@r.ID"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Bu randevuyu silmek istediğine emin misin?');">
+                        Sil
+                    </a>
+
+                    <!-- Onay Checkbox -->
+                    <form asp-action="OnayDegistir"
+                          method="post"
+                          style="display:inline">
+                        <input type="hidden" name="id" value="@r.ID" />
+
+                        <input type="checkbox"
+                               name="onay"
+                               value="true"
+                               @(r.OnayDurumu ? "checked" : "")
+                               onchange="this.form.submit()" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

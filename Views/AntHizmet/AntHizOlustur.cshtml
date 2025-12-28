@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Antrenör - Hizmet Atama";
+}
+
+<h2>Antrenör – Hizmet Atama</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AntHizOlustur" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group mb-2">
+                <label>Antrenör</label>
+                <select name="antrenorId"
+                        class="form-control"
+                        asp-items="ViewBag.Antrenorler">
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Hizmet</label>
+                <select name="hizmetId"
+                        class="form-control"
+                        asp-items="ViewBag.Hizmetler"></select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+
+            <a asp-action="AntHizList" class="btn btn-secondary ms-2">Listeye Dön</a>
+        </form>
+    </div>
+</div>

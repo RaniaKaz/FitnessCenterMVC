@@ -1,0 +1,58 @@
+﻿@model IEnumerable<webProject.Models.Hizmet>
+
+@{
+    ViewData["Title"] = "Hizmetler";
+}
+
+<h2>Hizmetler</h2>
+
+<p>
+    <a asp-action="HizOlustur" class="btn btn-primary">
+        Yeni Hizmet Oluştur
+    </a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Henüz hizmet eklenmemiştir.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().Ad)</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var hizmet in Model)
+            {
+                <tr>
+                    <td>@hizmet.Ad</td>
+                    <td>
+                        <a asp-action="HizDetay"
+                           asp-route-id="@hizmet.ID"
+                           class="btn btn-sm btn-info">
+                            Detay
+                        </a>
+
+                        <a asp-action="HizDuzenle"
+                           asp-route-id="@hizmet.ID"
+                           class="btn btn-sm btn-warning">
+                            Düzenle
+                        </a>
+
+                        <a asp-action="HizSilOnay"
+                           asp-route-id="@hizmet.ID"
+                           class="btn btn-sm btn-danger">
+                            Sil
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

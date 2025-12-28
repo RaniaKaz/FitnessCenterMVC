@@ -37,7 +37,8 @@
         </dd>
     </dl>
     
-    <form asp-action="UyeSil">
+    <form asp-action="UyeSilOnay">
+        <input type="hidden" asp-for="ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="UyeList">Back to List</a>
     </form>

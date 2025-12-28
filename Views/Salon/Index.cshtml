@@ -1,0 +1,53 @@
+﻿@model IEnumerable<webProject.Models.Salon>
+
+@{
+    ViewData["Title"] = "Salonlar";
+}
+
+<h2>Salonlar</h2>
+
+<p>
+    <a asp-action="SalOlustur" class="btn btn-primary">
+        Yeni Salon Oluştur
+    </a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Ad)</th>
+            <th>@Html.DisplayNameFor(model => model.First().AcilisSaati)</th>
+            <th>@Html.DisplayNameFor(model => model.First().KapanisSaati)</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var salon in Model)
+        {
+            <tr>
+                <td>@salon.Ad</td>
+                <td>@salon.AcilisSaati.ToString(@"hh\:mm")</td>
+                <td>@salon.KapanisSaati.ToString(@"hh\:mm")</td>
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@salon.ID"
+                       class="btn btn-sm btn-info">
+                        Detay
+                    </a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@salon.ID"
+                       class="btn btn-sm btn-warning">
+                        Düzenle
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@salon.ID"
+                       class="btn btn-sm btn-danger">
+                        Sil
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,846 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "webProject",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/AntrenorApi": {
+      "get": {
+        "tags": [
+          "AntrenorApi"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Antrenor"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Antrenor"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Antrenor"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "AntrenorApi"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/AntrenorApi/{id}": {
+      "get": {
+        "tags": [
+          "AntrenorApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Antrenor"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Antrenor"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Antrenor"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "AntrenorApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AntrenorApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/AntrenorApi/uygun": {
+      "get": {
+        "tags": [
+          "AntrenorApi"
+        ],
+        "parameters": [
+          {
+            "name": "gun",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/DayOfWeek"
+            }
+          },
+          {
+            "name": "saat",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-span"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Api": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Api/{id}": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Api"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Api"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/UyeApi": {
+      "get": {
+        "tags": [
+          "UyeApi"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "UyeApi"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/UyeApi/{uyeId}/randevular": {
+      "get": {
+        "tags": [
+          "UyeApi"
+        ],
+        "parameters": [
+          {
+            "name": "uyeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/UyeApi/{id}": {
+      "put": {
+        "tags": [
+          "UyeApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "UyeApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AntHizmet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "antrenorID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hizmetID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "antrenor": {
+            "$ref": "#/components/schemas/Antrenor"
+          },
+          "hizmet": {
+            "$ref": "#/components/schemas/Hizmet"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AntMusaitlik": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "antrenorID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gun": {
+            "$ref": "#/components/schemas/DayOfWeek"
+          },
+          "baslangic": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "bitis": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "antrenor": {
+            "$ref": "#/components/schemas/Antrenor"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Antrenor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ad": {
+            "type": "string",
+            "nullable": true
+          },
+          "soyad": {
+            "type": "string",
+            "nullable": true
+          },
+          "uzmanlıkAlanı": {
+            "type": "string",
+            "nullable": true
+          },
+          "randevular": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Randevu"
+            },
+            "nullable": true
+          },
+          "antHizmetler": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AntHizmet"
+            },
+            "nullable": true
+          },
+          "musaitlik": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AntMusaitlik"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DayOfWeek": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "HizSalon": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hizmetID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "salonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fiyat": {
+            "type": "number",
+            "format": "double"
+          },
+          "sure": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hizmet": {
+            "$ref": "#/components/schemas/Hizmet"
+          },
+          "salon": {
+            "$ref": "#/components/schemas/Salon"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Hizmet": {
+        "required": [
+          "ad"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ad": {
+            "minLength": 2,
+            "type": "string"
+          },
+          "randevular": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Randevu"
+            },
+            "nullable": true
+          },
+          "hizSalonlar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HizSalon"
+            },
+            "nullable": true
+          },
+          "atrHizmetler": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AntHizmet"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Randevu": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uyeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "antrenorID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hizmetID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uye": {
+            "$ref": "#/components/schemas/Uye"
+          },
+          "antrenor": {
+            "$ref": "#/components/schemas/Antrenor"
+          },
+          "hizmet": {
+            "$ref": "#/components/schemas/Hizmet"
+          },
+          "ucret": {
+            "type": "number",
+            "format": "double"
+          },
+          "randevuTarihi": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "onayDurumu": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Salon": {
+        "required": [
+          "acilisSaati",
+          "ad",
+          "kapanisSaati"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ad": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "acilisSaati": {
+            "type": "string",
+            "format": "time"
+          },
+          "kapanisSaati": {
+            "type": "string",
+            "format": "time"
+          },
+          "antrenor": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Antrenor"
+            },
+            "nullable": true
+          },
+          "hizSalonlar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HizSalon"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Uye": {
+        "required": [
+          "ad",
+          "email",
+          "soyad",
+          "yas"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identityUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "ad": {
+            "minLength": 2,
+            "type": "string"
+          },
+          "soyad": {
+            "minLength": 2,
+            "type": "string"
+          },
+          "yas": {
+            "maximum": 60,
+            "minimum": 17,
+            "type": "integer",
+            "format": "int32"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "kayitTarihi": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "AntrenorApi"
+    },
+    {
+      "name": "Api"
+    },
+    {
+      "name": "UyeApi"
+    }
+  ]
+}

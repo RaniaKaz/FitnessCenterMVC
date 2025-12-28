@@ -1,14 +1,15 @@
-﻿namespace webProject.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace webProject.Models
 {
     public class AntMusaitlik
     {
         public int ID { get; set; }
-        public int AntID { get; set; }
+        public int AntrenorID { get; set; }
         public DayOfWeek Gun { get; set; }
-        //public TimeSpan BaslangicSaat { get; set; }
-        //public TimeSpan BitisSaat { get; set; }
-        public DateTime BaslangicTarihi { get; set; }
-        public TimeSpan BitisAraligi { get; set; }
+        public TimeSpan Baslangic { get; set; }
+        public TimeSpan Bitis { get; set; }
+        [ValidateNever]
         public Antrenor Antrenor { get; set; }
     }
 

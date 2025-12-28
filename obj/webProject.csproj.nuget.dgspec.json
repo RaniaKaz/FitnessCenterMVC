@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Rania\\source\\repos\\webProject\\webProject\\webProject.csproj": {}
+    "C:\\Users\\Rania\\OneDrive\\Desktop\\webProject (2)\\webProject\\webProject\\webProject\\webProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Rania\\source\\repos\\webProject\\webProject\\webProject.csproj": {
+    "C:\\Users\\Rania\\OneDrive\\Desktop\\webProject (2)\\webProject\\webProject\\webProject\\webProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Rania\\source\\repos\\webProject\\webProject\\webProject.csproj",
+        "projectUniqueName": "C:\\Users\\Rania\\OneDrive\\Desktop\\webProject (2)\\webProject\\webProject\\webProject\\webProject.csproj",
         "projectName": "webProject",
-        "projectPath": "C:\\Users\\Rania\\source\\repos\\webProject\\webProject\\webProject.csproj",
+        "projectPath": "C:\\Users\\Rania\\OneDrive\\Desktop\\webProject (2)\\webProject\\webProject\\webProject\\webProject.csproj",
         "packagesPath": "C:\\Users\\Rania\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Rania\\source\\repos\\webProject\\webProject\\obj\\",
+        "outputPath": "C:\\Users\\Rania\\OneDrive\\Desktop\\webProject (2)\\webProject\\webProject\\webProject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -89,6 +89,10 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[10.1.0, )"
             }
           },
           "imports": [

@@ -1,0 +1,29 @@
+﻿<h2>Admin Paneli</h2>
+
+<ul>
+    <li>Üye Sayısı: <b>@ViewBag.UyeSayisi</b></li>
+    <li>Antrenör Sayısı: <b>@ViewBag.AntrenorSayisi</b></li>
+    <li>Hizmet Sayısı: <b>@ViewBag.HizmetSayisi</b></li>
+</ul>
+
+<hr />
+
+<a asp-controller="Uye" asp-action="Index">Uye Yönetimi</a>
+<br />
+<a asp-controller="Randevu" asp-action="AdminRanList">Randevular</a>
+<br />
+<a asp-controller="Salon" asp-action="Index">Salon Yönetimi</a>
+<br />
+<a asp-controller="Hizmet" asp-action="Index">Hizmet Yönetimi</a>
+<br />
+<a asp-controller="Antrenor" asp-action="Index">Antrenör Yönetimi</a>
+<br />
+<a asp-controller="AntHizmet" asp-action="Index">Antrnöre Ait Hizmet Yönetimi</a>
+<br />
+<a asp-controller="HizmetSalon" asp-action="Index">Salona Ait Hizmetler Yönetimi</a>
+<br />
+<a asp-controller="AntMusaitlik" asp-action="Index">Antrnöre Ait Müsaitlik Yönetimi</a>
+
+
+
+

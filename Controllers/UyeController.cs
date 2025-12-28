@@ -1,24 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using webProject.Data;
 using webProject.Models;
 namespace webProject.Controllers
 {
+    [Authorize]
     public class UyeController : Controller
     {
         private readonly FitnessDbContext _context;
+        private readonly UserManager<ApplicationUsers> _userManager;
 
         // 🔹 DbContext burada otomatik geliyor (DI)
-        public UyeController(FitnessDbContext context)
+        public UyeController(FitnessDbContext context, UserManager<ApplicationUsers> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         //-----Create İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult UyeOlustur()
         {
 
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult UyeOlustur(Uye uye)
         {
             if (ModelState.IsValid)
@@ -30,6 +37,7 @@ namespace webProject.Controllers
             return View("UyeOlustur");
         }
         //-----Detay İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult UyeDetay(int id)
         {
             if(id <= 0)
@@ -43,6 +51,7 @@ namespace webProject.Controllers
             return View(uye);
         }
         //-----Düzenleme İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult UyeDuzenle(int id)
         {
             if (id <= 0)
@@ -52,6 +61,7 @@ namespace webProject.Controllers
             return View(uye);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult UyeDuzenle(Uye uye)
         {
             if (ModelState.IsValid)
@@ -63,6 +73,7 @@ namespace webProject.Controllers
             return View(uye);
         }
         //-----Listeleme İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult UyeList()
         {
             var uyeler = _context.Uye.ToList();
@@ -70,6 +81,7 @@ namespace webProject.Controllers
         }
 
         //-----Delete İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult UyeSil(int id)
         {
             if(id <= 0)
@@ -83,6 +95,8 @@ namespace webProject.Controllers
             return View(uye);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult UyeSilOnay(int id)
         {
             var uye = _context.Uye.FirstOrDefault(u => u.ID == id);
@@ -90,15 +104,29 @@ namespace webProject.Controllers
             if (uye == null)
                 return NotFound();
 
-             _context.Uye.Remove(uye);
+            var user = _context.Users.FirstOrDefault(u => u.UyeID == uye.ID);
+            if (user != null)
+            {
+                _userManager.DeleteAsync(user);
+            }
+            _context.Uye.Remove(uye);
              _context.SaveChanges();
 
             return RedirectToAction("UyeList");
             
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            return View();
+            var uyeler = _context.Uye.ToList();
+            return View(uyeler);
         }
+        [Authorize(Roles = "Uye")]
+        public async Task<IActionResult> UserPaneli()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            return View(user);
+        }
+
     }
 }

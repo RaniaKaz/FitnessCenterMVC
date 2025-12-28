@@ -23,21 +23,9 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Ad)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SureDaikia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SureDaikia)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fiyat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fiyat)
-        </dd>
     </dl>
     
-    <form asp-action="HizSil">
+    <form asp-action="HizSilOnay">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="HizList">Back to List</a>
     </form>

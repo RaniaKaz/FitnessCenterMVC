@@ -12,8 +12,8 @@ using webProject.Data;
 namespace webProject.Migrations
 {
     [DbContext(typeof(FitnessDbContext))]
-    [Migration("20251214194401_InitialWithIdentity")]
-    partial class InitialWithIdentity
+    [Migration("20251223034716_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,21 +163,16 @@ namespace webProject.Migrations
 
             modelBuilder.Entity("webProject.Models.AntHizmet", b =>
                 {
-                    b.Property<int>("AntID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("HizID")
-                        .HasColumnType("integer");
-
                     b.Property<int>("AntrenorID")
                         .HasColumnType("integer");
 
                     b.Property<int>("HizmetID")
                         .HasColumnType("integer");
 
-                    b.HasKey("AntID", "HizID");
+                    b.Property<int>("ID")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("AntrenorID");
+                    b.HasKey("AntrenorID", "HizmetID");
 
                     b.HasIndex("HizmetID");
 
@@ -192,16 +187,13 @@ namespace webProject.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("AntID")
-                        .HasColumnType("integer");
-
                     b.Property<int>("AntrenorID")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("BaslangicTarihi")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<TimeSpan>("Baslangic")
+                        .HasColumnType("interval");
 
-                    b.Property<TimeSpan>("BitisAraligi")
+                    b.Property<TimeSpan>("Bitis")
                         .HasColumnType("interval");
 
                     b.Property<int>("Gun")
@@ -226,6 +218,9 @@ namespace webProject.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("SalonID")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Soyad")
                         .IsRequired()
                         .HasColumnType("text");
@@ -235,6 +230,8 @@ namespace webProject.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("SalonID");
 
                     b.ToTable("Antrenor");
                 });
@@ -310,27 +307,22 @@ namespace webProject.Migrations
 
             modelBuilder.Entity("webProject.Models.HizSalon", b =>
                 {
-                    b.Property<int>("HizID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SalID")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Fiyat")
-                        .HasColumnType("numeric");
-
                     b.Property<int>("HizmetID")
                         .HasColumnType("integer");
 
                     b.Property<int>("SalonID")
                         .HasColumnType("integer");
 
+                    b.Property<decimal>("Fiyat")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("ID")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Sure")
                         .HasColumnType("integer");
 
-                    b.HasKey("HizID", "SalID");
-
-                    b.HasIndex("HizmetID");
+                    b.HasKey("HizmetID", "SalonID");
 
                     b.HasIndex("SalonID");
 
@@ -349,12 +341,6 @@ namespace webProject.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("Fiyat")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("SureDaikia")
-                        .HasColumnType("integer");
-
                     b.HasKey("ID");
 
                     b.ToTable("Hizmet");
@@ -368,14 +354,8 @@ namespace webProject.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("AtrenorID")
+                    b.Property<int>("AntrenorID")
                         .HasColumnType("integer");
-
-                    b.Property<TimeSpan>("BaslangicSaat")
-                        .HasColumnType("interval");
-
-                    b.Property<TimeSpan>("BitisSaat")
-                        .HasColumnType("interval");
 
                     b.Property<int>("HizmetID")
                         .HasColumnType("integer");
@@ -392,21 +372,13 @@ namespace webProject.Migrations
                     b.Property<int>("UyeID")
                         .HasColumnType("integer");
 
-                    b.Property<int>("salonID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("sureDk")
-                        .HasColumnType("integer");
-
                     b.HasKey("ID");
 
-                    b.HasIndex("AtrenorID");
+                    b.HasIndex("AntrenorID");
 
                     b.HasIndex("HizmetID");
 
                     b.HasIndex("UyeID");
-
-                    b.HasIndex("salonID");
 
                     b.ToTable("Randevu");
                 });
@@ -419,9 +391,15 @@ namespace webProject.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("CalismaSaatleri")
+                    b.Property<TimeOnly>("AcilisSaati")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Ad")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<TimeOnly>("KapanisSaati")
+                        .HasColumnType("time");
 
                     b.HasKey("ID");
 
@@ -444,9 +422,12 @@ namespace webProject.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Sifre")
+                    b.Property<string>("IdentityUserId")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("KayitTarihi")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Soyad")
                         .IsRequired()
@@ -538,6 +519,13 @@ namespace webProject.Migrations
                     b.Navigation("Antrenor");
                 });
 
+            modelBuilder.Entity("webProject.Models.Antrenor", b =>
+                {
+                    b.HasOne("webProject.Models.Salon", null)
+                        .WithMany("Antrenor")
+                        .HasForeignKey("SalonID");
+                });
+
             modelBuilder.Entity("webProject.Models.ApplicationUsers", b =>
                 {
                     b.HasOne("webProject.Models.Uye", "uye")
@@ -568,37 +556,29 @@ namespace webProject.Migrations
 
             modelBuilder.Entity("webProject.Models.Randevu", b =>
                 {
-                    b.HasOne("webProject.Models.Antrenor", "atrenor")
+                    b.HasOne("webProject.Models.Antrenor", "Antrenor")
                         .WithMany("Randevular")
-                        .HasForeignKey("AtrenorID")
+                        .HasForeignKey("AntrenorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("webProject.Models.Hizmet", "hizmet")
+                    b.HasOne("webProject.Models.Hizmet", "Hizmet")
                         .WithMany("Randevular")
                         .HasForeignKey("HizmetID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("webProject.Models.Uye", "uye")
+                    b.HasOne("webProject.Models.Uye", "Uye")
                         .WithMany()
                         .HasForeignKey("UyeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("webProject.Models.Salon", "salon")
-                        .WithMany("Randevular")
-                        .HasForeignKey("salonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Antrenor");
 
-                    b.Navigation("atrenor");
+                    b.Navigation("Hizmet");
 
-                    b.Navigation("hizmet");
-
-                    b.Navigation("salon");
-
-                    b.Navigation("uye");
+                    b.Navigation("Uye");
                 });
 
             modelBuilder.Entity("webProject.Models.Antrenor", b =>
@@ -621,9 +601,9 @@ namespace webProject.Migrations
 
             modelBuilder.Entity("webProject.Models.Salon", b =>
                 {
-                    b.Navigation("HizSalonlar");
+                    b.Navigation("Antrenor");
 
-                    b.Navigation("Randevular");
+                    b.Navigation("HizSalonlar");
                 });
 #pragma warning restore 612, 618
         }

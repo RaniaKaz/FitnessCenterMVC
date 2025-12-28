@@ -1,0 +1,74 @@
+﻿@model IEnumerable<webProject.Models.Randevu>
+
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<h2>Randevularım</h2>
+
+<p>
+    <a asp-action="RanOlustur" class="btn btn-primary">
+        Yeni Randevu Al
+    </a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Henüz randevunuz bulunmamaktadır.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Hizmet</th>
+                <th>Antrenör</th>
+                <th>Tarih</th>
+                <th>Ücret</th>
+                <th>Durum</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.Hizmet?.Ad</td>
+                    <td>@r.Antrenor?.Ad</td>
+                    <td>@r.RandevuTarihi.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@r.Ucret ₺</td>
+                    <td>
+                        @if (r.OnayDurumu)
+                        {
+                            <span class="badge bg-success">Onaylandı</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Beklemede</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="RanDetay" asp-route-id="@r.ID" class="btn btn-sm btn-info">Detay</a>
+
+                        @if (!r.OnayDurumu)
+                        {
+                            <a asp-action="RanDuzenle"
+                               asp-route-id="@r.ID"
+                               class="btn btn-sm btn-warning">
+                                Düzenle
+                            </a>
+
+                            <a asp-action="RanSilOnay"
+                               asp-route-id="@r.ID"
+                               class="btn btn-sm btn-danger">
+                                Sil
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,28 +1,110 @@
-﻿@model webProject.Models.Randevu
+﻿@model webProject.Models.RandevuOlusturViewModel
 
-@{
-    ViewData["Title"] = "View";
-}
-
-<h1>View</h1>
-
-<h4>Randevu</h4>
+<h2>Randevu Oluştur</h2>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="RanOlustur" method="post">
 
-            <label>Hizmet</label>
-            <select name="hizmetId" asp-items="ViewBag.Hizmetler"></select>
+<form asp-action="RanOlustur" method="post">
+    @Html.AntiForgeryToken()
 
-            <label>Tarih & Saat</label>
-            <input type="datetime-local" name="baslangicZamani" />
-
-            <button type="submit">Randevu Al</button>
-        </form>
+    <div class="mb-3">
+        <label>Salon</label>
+        <select asp-for="SalonId" class="form-select" id="salon">
+            <option value="">-- Salon Seç --</option>
+            @foreach (var s in Model.Salonlar)
+            {
+                <option value="@s.Value">@s.Text</option>
+            }
+        </select>
     </div>
-</div>
+
+    <div class="mb-3">
+        <label>Hizmet</label>
+        <select asp-for="HizmetId" class="form-select" id="hizmet"></select>
+    </div>
+
+    <div class="mb-3">
+        <label>Antrenör</label>
+        <select asp-for="AntrenorId" class="form-select" id="antrenor"></select>
+    </div>
+
+    <div class="mb-3">
+        <label>Tarih & Saat</label>
+        <input asp-for="BaslangicTarihi" type="datetime-local" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Müsaitlik Saatleri</label>
+        <div id="musaitlikAlani" class="border rounded p-2 text-muted">
+            Lütfen bir antrenör seçin
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Randevu Al</button>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        $("#salon").change(function () {
+            $("#hizmet").empty();
+            $("#antrenor").empty();
+            $("#musaitlikAlani").html("Lütfen bir antrenör seçin");
+
+            if (!this.value) return;
+
+            $.get("/Randevu/HizmetleriGetir", { salonId: this.value }, function (data) {
+                $("#hizmet").append('<option value="">-- Hizmet Seç --</option>');
+                $.each(data, function (i, item) {
+                    $("#hizmet").append(`<option value="${item.id}">${item.ad}</option>`);
+                });
+            });
+        });
+
+        $("#hizmet").change(function () {
+            $("#antrenor").empty();
+            $("#musaitlikAlani").html("Lütfen bir antrenör seçin");
+
+            if (!this.value) return;
+
+            $.get("/Randevu/AntrenorleriGetir", { hizmetId: this.value }, function (data) {
+                $("#antrenor").append('<option value="">-- Antrenör Seç --</option>');
+                $.each(data, function (i, item) {
+                    $("#antrenor").append(`<option value="${item.id}">${item.ad}</option>`);
+                });
+            });
+        });
+
+        $("#antrenor").change(function () {
+
+            $("#musaitlikAlani").html("Yükleniyor...");
+
+            if (!this.value) {
+                $("#musaitlikAlani").html("Lütfen bir antrenör seçin");
+                return;
+            }
+
+            $.get("/Randevu/AntrenorMusaitlikGetir",
+                { antrenorId: this.value },
+                function (data) {
+
+                    if (data.length === 0) {
+                        $("#musaitlikAlani").html("Bu antrenör için müsaitlik tanımlı değil.");
+                        return;
+                    }
+
+                    let html = "<ul>";
+
+                    $.each(data, function (i, item) {
+                        html += `<li><strong>${item.gun}</strong> : ${item.baslangic} - ${item.bitis}</li>`;
+                    });
+
+                    html += "</ul>";
+
+                    $("#musaitlikAlani").html(html);
+                }
+            );
+        });
+
+    </script>
+}
+
 }

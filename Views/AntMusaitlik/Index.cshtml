@@ -1,0 +1,48 @@
+﻿@model IEnumerable<webProject.Models.AntMusaitlik>
+
+@{
+    ViewData["Title"] = "Antrenör Müsaitlikleri";
+}
+
+<h2>Antrenör Müsaitlikleri</h2>
+
+<p>
+    <a asp-action="AntMusaitlikOlustur" class="btn btn-success">Yeni Müsaitlik Ekle</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Antrenör</th>
+            <th>Gün</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th style="width:120px">İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Antrenor.Ad @item.Antrenor.Soyad
+                </td>
+                <td>
+                    @item.Gun
+                </td>
+                <td>
+                    @item.Baslangic.ToString(@"hh\:mm")
+                </td>
+                <td>
+                    @item.Bitis.ToString(@"hh\:mm")
+                </td>
+                <td>
+                    <a asp-action="AntMusaitlikSil" asp-route-id="@item.ID"
+                       class="btn btn-sm btn-danger">
+                        Sil
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

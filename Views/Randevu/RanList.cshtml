@@ -1,71 +1,46 @@
 ﻿@model IEnumerable<webProject.Models.Randevu>
 
-@{
-    ViewData["Title"] = "RanList";
-}
-
-<h1>RanList</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UyeID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AtrenorID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HizmetID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ucret)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RandevuTarihi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OnayDurumu)
-            </th>
+            <th>Hizmet</th>
+            <th>Antrenör</th>
+            <th>Ücret</th>
+            <th>Randevu Tarihi</th>
+            <th>Durum</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UyeID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AtrenorID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HizmetID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ucret)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RandevuTarihi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OnayDurumu)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "RanDuzenle", new {  id=item.ID }) |
-                    @Html.ActionLink("Details", "RanDetay", new { id = item.ID }) |
-                    @Html.ActionLink("Delete", "RanSil", new { id = item.ID })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Hizmet?.Ad</td>
+
+                <td>
+                    @item.Antrenor?.Ad @item.Antrenor?.Soyad
+                </td>
+
+                <td>@item.Ucret ₺</td>
+
+                <td>@item.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+
+                <td>
+                    @if (item.OnayDurumu)
+                    {
+                        <span class="badge bg-success">Onaylandı</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Beklemede</span>
+                    }
+                </td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ID">Detay</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Sil</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

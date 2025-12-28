@@ -1,0 +1,62 @@
+﻿@model IEnumerable<webProject.Models.Antrenor>
+
+@{
+    ViewData["Title"] = "Antrenörler";
+}
+
+<h2>Antrenörler</h2>
+
+<p>
+    <a asp-action="AntOlustur" class="btn btn-primary">
+        Yeni Antrenör Oluştur
+    </a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Henüz antrenör eklenmemiştir.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Ad</th>
+                <th>Soyad</th>
+                <th>Uzmanlık Alanı</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.Ad</td>
+                    <td>@a.Soyad</td>
+                    <td>@a.UzmanlıkAlanı</td>
+                    <td>
+                        <a asp-action="AntDetay"
+                           asp-route-id="@a.ID"
+                           class="btn btn-sm btn-info">
+                            Detay
+                        </a>
+
+                        <a asp-action="AntDuzenle"
+                           asp-route-id="@a.ID"
+                           class="btn btn-sm btn-warning">
+                            Düzenle
+                        </a>
+
+                        <a asp-action="AntSil"
+                           asp-route-id="@a.ID"
+                           class="btn btn-sm btn-danger">
+                            Sil
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

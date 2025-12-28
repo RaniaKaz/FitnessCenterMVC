@@ -2,8 +2,9 @@
 {
     public class HizSalon
     {
-        public int HizID { get; set; }
-        public int SalID { get; set; }
+        public int ID { get; set; }
+        public int HizmetID { get; set; }
+        public int SalonID { get; set; }
 
         public decimal Fiyat { get; set; }
         public int Sure { get; set; }

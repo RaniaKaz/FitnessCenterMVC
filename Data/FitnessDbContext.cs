@@ -26,10 +26,10 @@ namespace webProject.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<AntHizmet>()
-                .HasKey(ah => new { ah.AntID, ah.HizID });
+                .HasKey(ah => new { ah.AntrenorID, ah.HizmetID });
 
             modelBuilder.Entity<HizSalon>()
-                .HasKey(hs => new { hs.HizID, hs.SalID });
+                .HasKey(hs => new { hs.HizmetID, hs.SalonID });
         }
     }
 }

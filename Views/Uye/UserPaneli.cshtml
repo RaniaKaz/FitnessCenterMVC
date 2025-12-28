@@ -1,0 +1,64 @@
+﻿@model webProject.Models.ApplicationUsers
+
+@{
+    ViewData["Title"] = "Üye Paneli";
+}
+
+<h2>Hoş Geldiniz 👋</h2>
+<p class="text-muted">
+    @Model.Email
+</p>
+
+<hr />
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">🏋️ Randevu Al</h5>
+                <p class="card-text">
+                    Yeni bir randevu oluşturabilirsiniz.
+                </p>
+                <a asp-controller="Randevu"
+                   asp-action="RanOlustur"
+                   class="btn btn-primary">
+                    Randevu Al
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">📋 Randevularım</h5>
+                <p class="card-text">
+                    Aldığınız randevuları görüntüleyin.
+                </p>
+                <a asp-controller="Randevu"
+                   asp-action="RanList"
+                   class="btn btn-success">
+                    Randevularım
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">👤 Profil</h5>
+                <p class="card-text">
+                    Hesap bilgilerinizi yönetin.
+                </p>
+                <a asp-area="Identity"
+                   asp-page="/Account/Manage/Index"
+                   class="btn btn-secondary">
+                    Profilim
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>

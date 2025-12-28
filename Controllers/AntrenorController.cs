@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webProject.Data;
 using webProject.Models;
 
 namespace webProject.Controllers
 {
+    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AntrenorController : Controller
     {
         int sayi = 0;
@@ -24,13 +27,13 @@ namespace webProject.Controllers
 
             var model = new AntrenorHizmetSecViewModel
             {
-                AntID = id,
-                AntAdSoyad = antrenor.Ad + " " + antrenor.Soyad,
+                AntrenorID = id,
+                AntrenorAdSoyad = antrenor.Ad + " " + antrenor.Soyad,
                 Hizmetler = hizmetler.Select(h => new HizmetSecItem
                 {
                     ID = h.ID,
                     Ad = h.Ad,
-                    SeciliMi = antrenor.AntHizmetler.Any(ah => ah.HizID == h.ID)
+                    SeciliMi = antrenor.AntHizmetler.Any(ah => ah.HizmetID == h.ID)
                 }).ToList()
 
             };
@@ -41,7 +44,7 @@ namespace webProject.Controllers
         public IActionResult HizmetSec(AntrenorHizmetSecViewModel model)
         {
             var antrenor = _context.Antrenor.Include(a=> a.AntHizmetler)
-                .FirstOrDefault(a=> a.ID == model.AntID);
+                .FirstOrDefault(a=> a.ID == model.AntrenorID);
 
             if (antrenor == null)
                 return NotFound();
@@ -52,12 +55,12 @@ namespace webProject.Controllers
             {
                 _context.AntHizmet.Add(new AntHizmet
                 {
-                    AntID = antrenor.ID,
-                    HizID = item.ID
+                    AntrenorID = antrenor.ID,
+                    HizmetID = item.ID
                 });
             }
             _context.SaveChanges();
-            return RedirectToAction("AntDetay", new {id = model.AntID}); 
+            return RedirectToAction("AntDetay", new {id = model.AntrenorID}); 
         }
         //-----Create İşlemi-----
         public IActionResult AntOlustur()
@@ -147,7 +150,8 @@ namespace webProject.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var antrenoler = _context.Antrenor.ToList();
+            return View(antrenoler);
         }
     }
 }

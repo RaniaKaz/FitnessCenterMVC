@@ -2,158 +2,243 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using webProject.Data;
 using webProject.Models;
 
 namespace webProject.Controllers
 {
+    [Authorize]
     public class RandevuController : Controller
     {
         private readonly FitnessDbContext _context;
         private readonly UserManager<ApplicationUsers> _userManager;
+
         public RandevuController(FitnessDbContext context, UserManager<ApplicationUsers> userManager)
         {
             _context = context;
-            _userManager = userManager; //kullanıcı yönetimi için 
+            _userManager = userManager;
         }
-        private List<Antrenor> uygunAntrenorleriGetir(int hizmetid, DateTime baslangic, int sure)
-        {
-            //Başlangıç zamanına, verilen dakika süresini ekleyip
-            //bitiş zamanını hesaplıyor.
-            var bitis = baslangic.AddMinutes(sure);
-            var gun = baslangic.DayOfWeek; //haftanın hangni günü
 
-            return _context.Antrenor
-                //Antrenörlerin verilen hizmeti sunup sunmadığını kontrol et
-                .Where(a => a.AntHizmetler.Any(ah => ah.HizID == hizmetid))
-                //Antrenörlerin müsaitlik durumunu kontrol et
-                .Where(a => a.Musaitlik.Any(m => m.Gun == gun &&
-                m.BaslangicTarihi == baslangic && m.BitisAraligi == bitis.TimeOfDay))
-                //Saat çakışması var mı
-                .Where(a => !a.Randevular.Any(r => baslangic < r.RandevuTarihi && bitis > r.RandevuTarihi))
+        // ===================== AJAX =====================
+
+        [HttpGet]
+        public IActionResult HizmetleriGetir(int salonId)
+        {
+            var hizmetler = _context.HizSalon
+                .Where(x => x.SalonID == salonId)
+                .Include(x => x.Hizmet)
+                .Select(x => new { id = x.Hizmet.ID, ad = x.Hizmet.Ad })
+                .Distinct()
                 .ToList();
+
+            return Json(hizmetler);
         }
-        //-----Create İşlemi-----
+
+        [HttpGet]
+        public IActionResult AntrenorleriGetir(int hizmetId)
+        {
+            var antrenorler = _context.AntHizmet
+                .Where(x => x.HizmetID == hizmetId)
+                .Include(x => x.Antrenor)
+                .Select(x => new
+                {
+                    id = x.Antrenor.ID,
+                    ad = x.Antrenor.Ad + " " + x.Antrenor.Soyad
+                })
+                .Distinct()
+                .ToList();
+
+            return Json(antrenorler);
+        }
+        [HttpGet]
+        public IActionResult AntrenorMusaitlikGetir(int antrenorId)
+        {
+            var musaitlikler = _context.AntMusaitlik
+                .Where(m => m.AntrenorID == antrenorId)
+                .Select(m => new
+                {
+                    gun = m.Gun.ToString(),          // Pazartesi, Salı...
+                    baslangic = m.Baslangic.ToString(@"hh\:mm"),
+                    bitis = m.Bitis.ToString(@"hh\:mm")
+                })
+                .ToList();
+
+            return Json(musaitlikler);
+        }
+
+        // ===================== GET =====================
+
+        [Authorize(Roles = "Uye")]
         public IActionResult RanOlustur()
         {
-            ViewData["Uyeler"] = new SelectList(_context.Uye, "ID", "Ad"); //HTML'de option
-            ViewData["Hizmetler"] = new SelectList(_context.Hizmet, "ID", "HizmetAd");
-            return View();
+            var model = new RandevuOlusturViewModel
+            {
+                Salonlar = _context.Salon
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.ID.ToString(),
+                        Text = s.Ad
+                    }).ToList()
+            };
+
+            return View(model);
         }
+
+        // ===================== POST =====================
+
         [Authorize(Roles = "Uye")]
         [HttpPost]
-        public IActionResult RanOlustur(int uyeID, int hizmetId, DateTime BaslangicTarihi)
+        [ValidateAntiForgeryToken]
+        public IActionResult RanOlustur(RandevuOlusturViewModel model)
         {
-            var hizmet = _context.Hizmet.FirstOrDefault(h => h.ID == hizmetId);
-            if (hizmet == null)
-                return NotFound();
 
-            var uygunAntrenoler = uygunAntrenorleriGetir(hizmetId, BaslangicTarihi, hizmet.SureDaikia);
-
-            if (!uygunAntrenoler.Any())
+            if (!ModelState.IsValid)
             {
-                ViewData["Bulunamadi"] = "Seçilen zaman diliminde uygun antrenör bulunamadı.";
-                return View();
+                model.Salonlar = _context.Salon
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.ID.ToString(),
+                        Text = s.Ad
+                    }).ToList();
+
+                return View(model);
             }
 
-            var antrenor = uygunAntrenoler.First();
+            var identityId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var uye = _context.Uye.FirstOrDefault(u => u.IdentityUserId == identityId);
 
+            if (uye == null)
+                return Unauthorized();
+
+            var hizSalon = _context.HizSalon
+                .FirstOrDefault(x => x.HizmetID == model.HizmetId && x.SalonID == model.SalonId);
+
+            if (hizSalon == null)
+            {
+                ModelState.AddModelError("", "Bu hizmet bu salonda yok.");
+                return View(model);
+            }
+
+            var antrenor = _context.Antrenor.FirstOrDefault(a => a.ID == model.AntrenorId);
+            if (antrenor == null)
+            {
+                ModelState.AddModelError("", "Antrenör bulunamadı.");
+                return View(model);
+            }
+
+            var randevuTarihi = model.BaslangicTarihi;
+            var gun = randevuTarihi.DayOfWeek;
+            var saat = randevuTarihi.TimeOfDay;
+            // 1️ MÜSAİTLİK KONTROLÜ
+            var musaitMi = _context.AntMusaitlik.Any(m =>
+                m.AntrenorID == model.AntrenorId &&
+                m.Gun == gun &&
+                m.Baslangic <= saat &&
+                m.Bitis >= saat
+            );
+
+            if (!musaitMi)
+            {
+                ModelState.AddModelError("", "Seçilen saat antrenörün müsait saatleri dışında.");
+
+                model.Salonlar = _context.Salon
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.ID.ToString(),
+                        Text = s.Ad
+                    }).ToList();
+
+                return View(model);
+            }
+
+            // ÇAKIŞAN RANDEVU VAR MI?
+            var cakismaVarMi = _context.Randevu.Any(r =>
+                r.AntrenorID == model.AntrenorId &&
+                r.RandevuTarihi == randevuTarihi
+            );
+
+            if (cakismaVarMi)
+            {
+                ModelState.AddModelError("", "Bu saat için antrenörün başka bir randevusu var.");
+
+                model.Salonlar = _context.Salon
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.ID.ToString(),
+                        Text = s.Ad
+                    }).ToList();
+
+                return View(model);
+            }
             var randevu = new Randevu
             {
-                UyeID = uyeID,
-                HizmetID = hizmetId,
-                AtrenorID = antrenor.ID,
-                RandevuTarihi = BaslangicTarihi,
-                sureDk = hizmet.SureDaikia,
-                OnayDurumu = false
-
+                UyeID = uye.ID,
+                HizmetID = model.HizmetId,
+                AntrenorID = model.AntrenorId,
+                RandevuTarihi = DateTime.SpecifyKind(model.BaslangicTarihi, DateTimeKind.Utc),
+                OnayDurumu = false,
+                Ucret = hizSalon.Fiyat
             };
 
             _context.Randevu.Add(randevu);
             _context.SaveChanges();
+
             return RedirectToAction("RanList");
-
-
-            /*if (ModelState.IsValid)
-            {
-                _context.Randevu.Add(randevu);
-                _context.SaveChanges();
-                return RedirectToAction("RanList");
-            }
-            return View("RanOlustur");*/
         }
-        //-----Detay İşlemi-----
-        public IActionResult RanDetay(int id)
+
+        // ===================== LIST =====================
+
+        [Authorize(Roles = "Uye")]
+        public async Task<IActionResult> RanList()
         {
-            if (id <= 0)
-                return NotFound();
+            var identityId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-            var randevu = _context.Randevu.FirstOrDefault(r => r.ID == id);
+            if (identityId == null)
+                return Unauthorized();
 
-            if (randevu == null)
-                return NotFound();
+            var uye = await _context.Uye
+                .FirstOrDefaultAsync(u => u.IdentityUserId == identityId);
 
-            return View(randevu);
-        }
-        //-----Düzenleme İşlemi-----
-        public IActionResult RanDuzenle(int id)
-        {
-            if (id <= 0)
-                return NotFound();
+            if (uye == null)
+                return Unauthorized();
 
-            var randevu = _context.Randevu.FirstOrDefault(r => r.ID == id);
-            if (randevu == null)
-                return NotFound();
-            return View(randevu);
-        }
-        [HttpPost]
-        public IActionResult RanDuzenle(Randevu randevu)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Randevu.Update(randevu);
-                _context.SaveChanges();
-                return RedirectToAction("RanList");
-            }
-            return View(randevu);
-        }
-        //-----Listeleme İşlemi-----
-        public IActionResult RanList()
-        {
+            var randevular = await _context.Randevu
+                .Include(r => r.Hizmet)
+                .Include(r => r.Antrenor)
+                .Where(r => r.UyeID == uye.ID)
+                .OrderByDescending(r => r.RandevuTarihi)
+                .ToListAsync();
 
-            var randevular = _context.Randevu.ToList();
             return View(randevular);
         }
-        //-----Listeleme İşlemi (Üye Bazlı)----------
-        //-----Delete İşlemi-----
-        public IActionResult RanSil(int id)
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminRanList()
         {
-            if (id <= 0)
-                return NotFound();
+            var randevular = _context.Randevu
+                .Include(r => r.Uye)
+                .Include(r => r.Hizmet)
+                .Include(r => r.Antrenor)
+                .ToList();
 
-            var randevu = _context.Randevu.FirstOrDefault(r => r.ID == id);
-
-            if (randevu == null)
-                return NotFound();
-
-            return View(randevu);
+            return View(randevular);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult RanSilOnay(int id)
+        public IActionResult OnayDegistir(int id, bool onay)
         {
             var randevu = _context.Randevu.FirstOrDefault(r => r.ID == id);
+            if (randevu == null) return NotFound();
 
-            if (randevu == null)
-                return NotFound();
-
-            _context.Randevu.Remove(randevu);
+            randevu.OnayDurumu = onay;
             _context.SaveChanges();
 
-            return RedirectToAction("RanList");
-
+            return RedirectToAction("AdminRanList");
         }
+
         public IActionResult Index()
         {
+
             return View();
         }
     }

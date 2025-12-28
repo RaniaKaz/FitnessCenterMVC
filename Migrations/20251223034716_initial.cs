@@ -7,26 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace webProject.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialWithIdentity : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Antrenor",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Ad = table.Column<string>(type: "text", nullable: false),
-                    Soyad = table.Column<string>(type: "text", nullable: false),
-                    UzmanlıkAlanı = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Antrenor", x => x.ID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -47,9 +32,7 @@ namespace webProject.Migrations
                 {
                     ID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Ad = table.Column<string>(type: "text", nullable: false),
-                    SureDaikia = table.Column<int>(type: "integer", nullable: false),
-                    Fiyat = table.Column<decimal>(type: "numeric", nullable: false)
+                    Ad = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,7 +45,9 @@ namespace webProject.Migrations
                 {
                     ID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CalismaSaatleri = table.Column<string>(type: "text", nullable: false)
+                    Ad = table.Column<string>(type: "text", nullable: false),
+                    AcilisSaati = table.Column<TimeOnly>(type: "time", nullable: false),
+                    KapanisSaati = table.Column<TimeOnly>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,37 +60,15 @@ namespace webProject.Migrations
                 {
                     ID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    IdentityUserId = table.Column<string>(type: "text", nullable: false),
                     Ad = table.Column<string>(type: "text", nullable: false),
                     Soyad = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    Sifre = table.Column<string>(type: "text", nullable: false)
+                    KayitTarihi = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Uye", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AntMusaitlik",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AntID = table.Column<int>(type: "integer", nullable: false),
-                    Gun = table.Column<int>(type: "integer", nullable: false),
-                    BaslangicTarihi = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    BitisAraligi = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    AntrenorID = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AntMusaitlik", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_AntMusaitlik_Antrenor_AntrenorID",
-                        column: x => x.AntrenorID,
-                        principalTable: "Antrenor",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,45 +93,39 @@ namespace webProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AntHizmet",
+                name: "Antrenor",
                 columns: table => new
                 {
-                    AntID = table.Column<int>(type: "integer", nullable: false),
-                    HizID = table.Column<int>(type: "integer", nullable: false),
-                    AntrenorID = table.Column<int>(type: "integer", nullable: false),
-                    HizmetID = table.Column<int>(type: "integer", nullable: false)
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Ad = table.Column<string>(type: "text", nullable: false),
+                    Soyad = table.Column<string>(type: "text", nullable: false),
+                    UzmanlıkAlanı = table.Column<string>(type: "text", nullable: false),
+                    SalonID = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AntHizmet", x => new { x.AntID, x.HizID });
+                    table.PrimaryKey("PK_Antrenor", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_AntHizmet_Antrenor_AntrenorID",
-                        column: x => x.AntrenorID,
-                        principalTable: "Antrenor",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AntHizmet_Hizmet_HizmetID",
-                        column: x => x.HizmetID,
-                        principalTable: "Hizmet",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Antrenor_Salon_SalonID",
+                        column: x => x.SalonID,
+                        principalTable: "Salon",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
                 name: "HizSalon",
                 columns: table => new
                 {
-                    HizID = table.Column<int>(type: "integer", nullable: false),
-                    SalID = table.Column<int>(type: "integer", nullable: false),
-                    Fiyat = table.Column<decimal>(type: "numeric", nullable: false),
-                    Sure = table.Column<int>(type: "integer", nullable: false),
                     HizmetID = table.Column<int>(type: "integer", nullable: false),
-                    SalonID = table.Column<int>(type: "integer", nullable: false)
+                    SalonID = table.Column<int>(type: "integer", nullable: false),
+                    ID = table.Column<int>(type: "integer", nullable: false),
+                    Fiyat = table.Column<decimal>(type: "numeric", nullable: false),
+                    Sure = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HizSalon", x => new { x.HizID, x.SalID });
+                    table.PrimaryKey("PK_HizSalon", x => new { x.HizmetID, x.SalonID });
                     table.ForeignKey(
                         name: "FK_HizSalon_Hizmet_HizmetID",
                         column: x => x.HizmetID,
@@ -215,28 +172,71 @@ namespace webProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AntHizmet",
+                columns: table => new
+                {
+                    AntrenorID = table.Column<int>(type: "integer", nullable: false),
+                    HizmetID = table.Column<int>(type: "integer", nullable: false),
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AntHizmet", x => new { x.AntrenorID, x.HizmetID });
+                    table.ForeignKey(
+                        name: "FK_AntHizmet_Antrenor_AntrenorID",
+                        column: x => x.AntrenorID,
+                        principalTable: "Antrenor",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AntHizmet_Hizmet_HizmetID",
+                        column: x => x.HizmetID,
+                        principalTable: "Hizmet",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AntMusaitlik",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AntrenorID = table.Column<int>(type: "integer", nullable: false),
+                    Gun = table.Column<int>(type: "integer", nullable: false),
+                    Baslangic = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    Bitis = table.Column<TimeSpan>(type: "interval", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AntMusaitlik", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_AntMusaitlik_Antrenor_AntrenorID",
+                        column: x => x.AntrenorID,
+                        principalTable: "Antrenor",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Randevu",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UyeID = table.Column<int>(type: "integer", nullable: false),
-                    AtrenorID = table.Column<int>(type: "integer", nullable: false),
+                    AntrenorID = table.Column<int>(type: "integer", nullable: false),
                     HizmetID = table.Column<int>(type: "integer", nullable: false),
-                    salonID = table.Column<int>(type: "integer", nullable: false),
                     Ucret = table.Column<decimal>(type: "numeric", nullable: false),
                     RandevuTarihi = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    OnayDurumu = table.Column<bool>(type: "boolean", nullable: false),
-                    BaslangicSaat = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    BitisSaat = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    sureDk = table.Column<int>(type: "integer", nullable: false)
+                    OnayDurumu = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Randevu", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Randevu_Antrenor_AtrenorID",
-                        column: x => x.AtrenorID,
+                        name: "FK_Randevu_Antrenor_AntrenorID",
+                        column: x => x.AntrenorID,
                         principalTable: "Antrenor",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -244,12 +244,6 @@ namespace webProject.Migrations
                         name: "FK_Randevu_Hizmet_HizmetID",
                         column: x => x.HizmetID,
                         principalTable: "Hizmet",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Randevu_Salon_salonID",
-                        column: x => x.salonID,
-                        principalTable: "Salon",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -346,11 +340,6 @@ namespace webProject.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AntHizmet_AntrenorID",
-                table: "AntHizmet",
-                column: "AntrenorID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AntHizmet_HizmetID",
                 table: "AntHizmet",
                 column: "HizmetID");
@@ -359,6 +348,11 @@ namespace webProject.Migrations
                 name: "IX_AntMusaitlik_AntrenorID",
                 table: "AntMusaitlik",
                 column: "AntrenorID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Antrenor_SalonID",
+                table: "Antrenor",
+                column: "SalonID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -403,29 +397,19 @@ namespace webProject.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_HizSalon_HizmetID",
-                table: "HizSalon",
-                column: "HizmetID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_HizSalon_SalonID",
                 table: "HizSalon",
                 column: "SalonID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Randevu_AtrenorID",
+                name: "IX_Randevu_AntrenorID",
                 table: "Randevu",
-                column: "AtrenorID");
+                column: "AntrenorID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Randevu_HizmetID",
                 table: "Randevu",
                 column: "HizmetID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Randevu_salonID",
-                table: "Randevu",
-                column: "salonID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Randevu_UyeID",
@@ -476,10 +460,10 @@ namespace webProject.Migrations
                 name: "Hizmet");
 
             migrationBuilder.DropTable(
-                name: "Salon");
+                name: "Uye");
 
             migrationBuilder.DropTable(
-                name: "Uye");
+                name: "Salon");
         }
     }
 }

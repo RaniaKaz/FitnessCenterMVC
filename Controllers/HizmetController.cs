@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using webProject.Data;
 using webProject.Models;
 
 namespace webProject.Controllers
 {
+    [Authorize]
     public class HizmetController : Controller
     {
         private readonly FitnessDbContext _context;
@@ -13,12 +15,15 @@ namespace webProject.Controllers
         }
 
         //-----Create İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult HizOlustur()
         {
 
             return View();
         }
+        
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult HizOlustur(Hizmet hizmet)
         {
             if (ModelState.IsValid)
@@ -29,7 +34,9 @@ namespace webProject.Controllers
             }
             return View("HizOlustur");
         }
+        
         //-----Detay İşlemi-----
+        [AllowAnonymous]
         public IActionResult HizDetay(int id)
         {
             if (id <= 0)
@@ -42,7 +49,9 @@ namespace webProject.Controllers
 
             return View(hizmet);
         }
+        
         //-----Düzenleme İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult HizDuzenle(int id)
         {
             if (id <= 0)
@@ -53,7 +62,9 @@ namespace webProject.Controllers
                 return NotFound();
             return View(hizmet);
         }
+        
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult HizDuzenle(Hizmet hizmet)
         {
             if (ModelState.IsValid)
@@ -64,7 +75,9 @@ namespace webProject.Controllers
             }
             return View(hizmet);
         }
+        
         //-----Listeleme İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult HizList()
         {
             var hizmetler = _context.Hizmet.ToList();
@@ -72,6 +85,7 @@ namespace webProject.Controllers
         }
 
         //-----Delete İşlemi-----
+        [Authorize(Roles = "Admin")]
         public IActionResult HizSil(int id)
         {
             if (id <= 0)
@@ -84,7 +98,9 @@ namespace webProject.Controllers
 
             return View(hizmet);
         }
+        
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult HizSilOnay(int id)
         {
             var hizmet = _context.Hizmet.FirstOrDefault(h => h.ID == id);
@@ -98,9 +114,12 @@ namespace webProject.Controllers
             return RedirectToAction("HizList");
 
         }
+        
+        [AllowAnonymous]
         public IActionResult Index()
         {
-            return View();
+            var hizmetler = _context.Hizmet.ToList();
+            return View(hizmetler);
         }
     }
 }

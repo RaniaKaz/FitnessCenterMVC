@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webProject.Data;
 using webProject.Models;
 
 namespace webProject.Controllers
 {
+    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SalonController : Controller
     {
         private readonly FitnessDbContext _context;
@@ -21,13 +24,23 @@ namespace webProject.Controllers
         [HttpPost]
         public IActionResult SalOlustur(Salon salon)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .Select(x => new { Field = x.Key, Errors = x.Value.Errors.Select(e => e.ErrorMessage).ToList() })
+                    .ToList();
+
+                // breakpoint koy veya Console'a yaz
+                return View(salon);
+            }
             if (ModelState.IsValid)
             {
                 _context.Salon.Add(salon);
                 _context.SaveChanges();
-                return RedirectToAction("SalList");
+                return RedirectToAction("Index");
             }
-            return View("SalOlustur");
+            return View(salon);
         }
         //-----Detay İşlemi-----
         public IActionResult SalDetay(int id)
@@ -59,7 +72,7 @@ namespace webProject.Controllers
             {
                 _context.Salon.Update(salon);
                 _context.SaveChanges();
-                return RedirectToAction("SalList");
+                return RedirectToAction("Index");
             }
             return View(salon);
         }
@@ -94,12 +107,13 @@ namespace webProject.Controllers
             _context.Salon.Remove(salon);
             _context.SaveChanges();
 
-            return RedirectToAction("SalList");
+            return RedirectToAction("Index");
 
         }
         public IActionResult Index()
         {
-            return View();
+            var salonlar = _context.Salon.ToList();
+            return View(salonlar);
         }
     }
 }

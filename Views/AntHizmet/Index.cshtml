@@ -1,0 +1,57 @@
+﻿@model IEnumerable<webProject.Models.AntHizmet>
+
+@{
+    ViewData["Title"] = "Antrenör - Hizmet Atamaları";
+}
+
+<h2>Antrenör - Hizmet Atamaları</h2>
+
+<p>
+    <a asp-action="AntHizOlustur" class="btn btn-primary">
+        Yeni Atama Oluştur
+    </a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Henüz antrenör – hizmet ataması yapılmamıştır.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Antrenör</th>
+                <th>Hizmet</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Antrenor.Ad @item.Antrenor.Soyad
+                    </td>
+                    <td>
+                        @item.Hizmet.Ad
+                    </td>
+                    <td>
+                        <form asp-action="AntHizSil"
+                              asp-route-id="@item.ID"
+                              method="post"
+                              style="display:inline"
+                              onsubmit="return confirm('Bu atamayı silmek istiyor musunuz?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Sil
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
